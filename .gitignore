@@ -13,7 +13,6 @@ _START_PACKAGE
 .env
 .env.local
 n8n.env
-deploy/n8n.env
 .vscode/*
 !.claude
 !.vscode/extensions.json
