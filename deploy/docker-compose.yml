@@ -1,0 +1,90 @@
+name: CloudWEB n8n
+
+networks:
+  cloudweb-net:
+    external: true
+  supabase_default:
+    external: true
+  mesh-net:
+    external: true
+
+volumes:
+  n8n_data:
+    name: n8n_data
+
+services:
+  n8n:
+    image: docker.n8n.io/n8nio/n8n:latest
+    container_name: n8n
+    restart: unless-stopped
+    ports:
+      - "${N8N_PORT:-5678}:5678"
+    networks:
+      - cloudweb-net
+      - supabase_default
+      - mesh-net
+    volumes:
+      - n8n_data:/home/node/.n8n
+    mem_limit: ${N8N_MEM_LIMIT:-2g}
+    cpus: ${N8N_CPUS:-2}
+    environment:
+      # ── Host / URL ──
+      - N8N_HOST=${N8N_HOST}
+      - N8N_PORT=${N8N_PORT:-5678}
+      - N8N_PROTOCOL=${N8N_PROTOCOL}
+      - N8N_PUBLIC_URL=${N8N_PUBLIC_URL}
+      - N8N_EDITOR_BASE_URL=${N8N_EDITOR_BASE_URL}
+      - N8N_WEBHOOK_EXTERNAL_PORT=${N8N_WEBHOOK_EXTERNAL_PORT:-443}
+      - WEBHOOK_URL=${WEBHOOK_URL}
+
+      # ── Database ──
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_DATABASE=${DB_POSTGRESDB_DATABASE}
+      - DB_POSTGRESDB_HOST=${DB_POSTGRESDB_HOST}
+      - DB_POSTGRESDB_PORT=${DB_POSTGRESDB_PORT}
+      - DB_POSTGRESDB_USER=${DB_POSTGRESDB_USER}
+      - DB_POSTGRESDB_PASSWORD=${DB_POSTGRESDB_PASSWORD}
+      - DB_POSTGRESDB_SCHEMA=${DB_POSTGRESDB_SCHEMA}
+      - DB_POSTGRESDB_SSL_ENABLED=${DB_POSTGRESDB_SSL_ENABLED}
+
+      # ── Security ──
+      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
+      - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=${N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS}
+      - N8N_SECURE_COOKIE=${N8N_SECURE_COOKIE}
+
+      # ── Proxy ──
+      - N8N_PROXY_HOPS=${N8N_PROXY_HOPS}
+      - N8N_METRICS_TRUSTED_PROXY_IPS=${N8N_METRICS_TRUSTED_PROXY_IPS}
+
+      # ── Executions / Logging ──
+      - EXECUTIONS_MODE=${EXECUTIONS_MODE}
+      - EXECUTIONS_DATA_PROCESS=${EXECUTIONS_DATA_PROCESS}
+      - EXECUTIONS_DATA_PRUNE=${EXECUTIONS_DATA_PRUNE}
+      - EXECUTIONS_DATA_MAX_AGE=${EXECUTIONS_DATA_MAX_AGE}
+      - N8N_LOG_LEVEL=${N8N_LOG_LEVEL}
+      - N8N_LOG_OUTPUT=${N8N_LOG_OUTPUT}
+      - N8N_METRICS=${N8N_METRICS}
+
+      # ── Storage ──
+      - N8N_DEFAULT_BINARY_DATA_MODE=${N8N_DEFAULT_BINARY_DATA_MODE}
+
+      # ── Email (SMTP) ──
+      - N8N_EMAIL_MODE=${N8N_EMAIL_MODE}
+      - N8N_SMTP_HOST=${N8N_SMTP_HOST}
+      - N8N_SMTP_PORT=${N8N_SMTP_PORT}
+      - N8N_SMTP_SSL=${N8N_SMTP_SSL}
+      - N8N_SMTP_USER=${N8N_SMTP_USER}
+      - N8N_SMTP_PASS=${N8N_SMTP_PASS}
+      - N8N_SMTP_SENDER=${N8N_SMTP_SENDER}
+      - N8N_SMTP_SENDER_NAME=${N8N_SMTP_SENDER_NAME}
+
+      # ── SSO ──
+      - N8N_SSO_REDIRECT_LOGIN_TO_SSO=${N8N_SSO_REDIRECT_LOGIN_TO_SSO}
+
+      # ── Advanced ──
+      - N8N_BLOCK_ENV_ACCESS_IN_NODE=${N8N_BLOCK_ENV_ACCESS_IN_NODE}
+      - N8N_GIT_NODE_DISABLE_BARE_REPOS=${N8N_GIT_NODE_DISABLE_BARE_REPOS}
+
+      # ── Timezone ──
+      - GENERIC_TIMEZONE=${GENERIC_TIMEZONE}
+      - TZ=${TZ}
