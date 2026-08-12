@@ -10,9 +10,14 @@ npm-debug.log*
 yarn.lock
 google-generated-credentials.json
 _START_PACKAGE
+# Environment files: all are ignored; only *.example may be committed
 .env
-.env.local
-n8n.env
+.env.*
+*.env
+*.env.*
+!.env.example
+!.env.local.example
+!*.env.example
 .vscode/*
 !.claude
 !.vscode/extensions.json
