@@ -39,3 +39,10 @@
 !packages/@n8n/typescript-config
 !packages/@n8n/typescript-config/**
 
+# === Environment files: never ship them, not even from the whitelisted ===
+# === subtrees above (scripts/**, patches/**, benchmark/**, compiled/**). ===
+# === No .example exception here: builds never need any env file.       ===
+.env
+.env.*
+*.env
+*.env.*
